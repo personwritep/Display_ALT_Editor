@@ -1,0 +1,72 @@
+// ==UserScript==
+// @name        Display ALT Editor
+// @namespace        http://tampermonkey.net/
+// @version        0.1
+// @description        編集画面内の記事画像にマウスホバーでALTを表示
+// @author        Ameba Blog User
+// @match        https://blog.ameba.jp/ucs/entry/srventry*
+// @exclude        https://blog.ameba.jp/ucs/entry/srventrylist*
+// @icon        https://www.google.com/s2/favicons?sz=64&domain=ameba.jp
+// @updateURL        https://github.com/personwritep/Display_ALT_Editor/raw/main/Display_ALT_Editor.user.js
+// @downloadURL        https://github.com/personwritep/Display_ALT_Editor/raw/main/Display_ALT_Editor.user.js
+// @grant        none
+// ==/UserScript==
+
+
+
+let editor_iframe=document.querySelector('.cke_wysiwyg_frame');
+if(editor_iframe){ // iframe読込みが実行条件
+    let iframe_doc=editor_iframe.contentWindow.document;
+    if(iframe_doc){
+
+        let adisp=
+            '<div class="alt_disp"><span ></span>'+
+            '<style>'+
+            '.alt_disp { position: absolute; z-index: calc(infinity); font: normal 14px/16px Meiryo; '+
+            'padding: 3px 6px 1px; color: #000; border: 1px solid #aaa; background: #fff; '+
+            'opacity: 0; }'+
+            '</style></div>';
+
+        if(!iframe_doc.querySelector('.alt_disp')){
+            iframe_doc.documentElement.insertAdjacentHTML('beforeend', adisp); }
+
+
+
+        iframe_doc.addEventListener('mouseover', function(event) {
+            let pelement=event.target;
+            if(pelement.tagName=='IMG'){
+                disp(pelement); }});
+
+
+
+        function disp(pelement){
+            let scroll_html=iframe_doc.documentElement;
+            let spos_y=scroll_html.scrollTop;
+            let pos_x=pelement.getBoundingClientRect().left+4;
+            let pos_y=pelement.getBoundingClientRect().top+spos_y+2;
+
+            let alt_disp=iframe_doc.querySelector('.alt_disp');
+            let alt_disp_span=iframe_doc.querySelector('.alt_disp span');
+            let alt_text=pelement.getAttribute('alt');
+            if(alt_text && alt_disp && alt_disp_span){
+                alt_disp_span.textContent=alt_text;
+                alt_disp.style.left=pos_x+'px';
+                alt_disp.style.top=pos_y+'px';
+                alt_disp.style.opacity='1';
+
+                disp_keep(pelement, alt_disp);
+                disp_out(pelement, alt_disp); }}
+
+
+
+        function disp_out(pelem, alt_disp){
+            pelem.onmouseleave=()=>{
+                alt_disp.style.opacity='0'; }}
+
+
+        function disp_keep(pelem, alt_disp){
+            alt_disp.onmouseover=()=>{
+                alt_disp.style.opacity='1'; }}
+
+    }} // if(editor_iframe)
+
