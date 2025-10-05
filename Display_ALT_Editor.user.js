@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Display ALT Editor
 // @namespace        http://tampermonkey.net/
-// @version        0.2
+// @version        0.3
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
 // @match        https://blog.ameba.jp/ucs/entry/srventry*
@@ -13,8 +13,9 @@
 // ==/UserScript==
 
 let target=document.getElementById('cke_1_contents'); // 監視 target
-let monitor=new MutationObserver(main);
-monitor.observe(target, {childList: true});
+if(target){
+    let monitor=new MutationObserver(main);
+    monitor.observe(target, {childList: true}); }
 
 main();
 
@@ -37,8 +38,9 @@ function main(){
 
 
             let target0=iframe_doc.querySelector('body.cke_editable'); // 監視 target
+            if(target0){
             let monitor0=new MutationObserver(img_check);
-            monitor0.observe(target0, {childList: true});
+            monitor0.observe(target0, {childList: true}); }
 
             img_check();
 
