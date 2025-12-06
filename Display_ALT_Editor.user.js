@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Display ALT Editor ⭐
 // @namespace        http://tampermonkey.net/
-// @version        0.4
+// @version        0.5
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
 // @match        https://blog.ameba.jp/ucs/entry/srventry*
@@ -126,11 +126,7 @@ function main(){
                         if(type==0){
                             card_image[k].setAttribute('alt', '🔗'); }
                         else{
-                            if(card_image[k].src.includes('.gif')){
-                                card_image[k].setAttribute('alt', '🔗'); }
-                            else{
-                                if(card_image[k].getAttribute('alt')=='🔗'){
-                                    card_image[k].setAttribute('alt', ''); }}}}
+                            card_image[k].setAttribute('alt', ''); }}
 
                 } //card_thumb()
 
