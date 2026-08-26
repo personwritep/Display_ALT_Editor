@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name        Display ALT Editor ⭐
 // @namespace        http://tampermonkey.net/
-// @version        0.5
+// @version        0.6
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
-// @match        https://blog.ameba.jp/ucs/entry/srventry*
-// @exclude        https://blog.ameba.jp/ucs/entry/srventrylist*
+// @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do*
+// @match        https://blog.ameba.jp/ucs/entry/srventryupdateinput.do*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=ameba.jp
 // @updateURL        https://github.com/personwritep/Display_ALT_Editor/raw/main/Display_ALT_Editor.user.js
 // @downloadURL        https://github.com/personwritep/Display_ALT_Editor/raw/main/Display_ALT_Editor.user.js
