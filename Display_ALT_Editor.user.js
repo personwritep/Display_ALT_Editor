@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Display ALT Editor ⭐
 // @namespace        http://tampermonkey.net/
-// @version        0.6
+// @version        0.7
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
 // @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do*
@@ -47,7 +47,6 @@ function wait_target(){
 
 
 function main(){
-
     let target0=document.getElementById('cke_1_contents'); // 監視 target
     if(target0){
         let monitor0=new MutationObserver(main_in);
@@ -87,8 +86,10 @@ function main(){
                             disp(all_img[k]); }); }
 
                     card_thumb();
+                    abort_key();
 
                 } // img_check()
+
 
 
                 function disp(pelement){
@@ -129,6 +130,32 @@ function main(){
                             card_image[k].setAttribute('alt', ''); }}
 
                 } //card_thumb()
+
+
+
+                function abort_key(){
+                    iframe_doc.addEventListener('keydown', (event)=>{
+                        if(event.key==='Control'){
+                            let alt_disp=iframe_doc.querySelector('.alt_disp');
+                            if(alt_disp){
+                                alt_disp.style.visibility='hidden';
+                                setTimeout(()=>{
+                                    alt_disp.style.visibility='';
+                                }, 2000);
+                            }}});
+
+
+                    document.addEventListener('keydown', (event)=>{
+                        if(event.key==='Control'){
+                            let alt_disp=iframe_doc.querySelector('.alt_disp');
+                            if(alt_disp){
+                                alt_disp.style.visibility='hidden';
+                                setTimeout(()=>{
+                                    alt_disp.style.visibility='';
+                                }, 2000);
+                            }}});
+
+                } // abort_key()
 
             }} // if(editor_iframe)
 
