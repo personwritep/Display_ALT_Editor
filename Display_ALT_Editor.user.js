@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Display ALT Editor ⭐
 // @namespace        http://tampermonkey.net/
-// @version        0.7
+// @version        0.8
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
 // @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do*
@@ -29,6 +29,26 @@ let style=
 
 if(!document.querySelector('.dispalt_el')){
     document.body.insertAdjacentHTML('beforeend', style); }
+
+
+let p_aiAlt=document.querySelector('.p-aiAlt__content');
+if(p_aiAlt){
+    let help=
+        '<div class="alt_help">'+
+        '<a href="https://ameblo.jp/personwritep/entry-12981455269.html" target="_blank">'+
+        '?</a></div>'+
+        '<style>'+
+        '.p-accessibility .p-aiAlt .p-aiAlt__container:hover { width: 150px; } '+
+        '.p-aiAlt__content { display: flex; } '+
+        '.alt_help { font: bold 14px/18px Meiryo; padding: 0 4px; margin: 6px -16px 0 20px; '+
+        'height: 15px; border: 1px solid #aaa; border-radius: 20px; z-index: 1; cursor: pointer; } '+
+        '.alt_help:hover { background: #00ffe2; } '+
+        '.p-accessibility .p-aiAlt__header, .p-accessibility .p-aiAlt__subTitle { display: none; }'+
+        '</style>';
+
+    if(!p_aiAlt.querySelector('.alt_help')){
+        p_aiAlt.insertAdjacentHTML('afterbegin', help); }}
+
 
 type_set();
 
