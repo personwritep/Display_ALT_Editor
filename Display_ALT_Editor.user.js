@@ -103,9 +103,12 @@ function main(){
                 function img_check(){
                     let body=iframe_doc.querySelector('body.cke_editable');
                     if(body){
-                        body.addEventListener('mouseover', (event)=>{
-                            if(event.target.tagName==='IMG'){
-                                disp(event.target); }}); }
+                        if(!body.hasAttribute('data-listener')){
+                            body.addEventListener('mouseover', (event)=>{
+                                if(event.target.tagName==='IMG'){
+                                    disp(event.target); }});
+
+                            body.setAttribute('data-listener', 'true'); }}
 
                     card_thumb();
 
