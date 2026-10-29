@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Display ALT Editor ⭐
 // @namespace        http://tampermonkey.net/
-// @version        0.8
+// @version        0.9
 // @description        編集画面内の記事画像にマウスホバーでALTを表示
 // @author        Ameba Blog User
 // @match        https://blog.ameba.jp/ucs/entry/srventryinsertinput.do*
@@ -43,6 +43,7 @@ if(p_aiAlt){
         '.alt_help { font: bold 14px/18px Meiryo; padding: 0 4px; margin: 6px -16px 0 20px; '+
         'height: 15px; border: 1px solid #aaa; border-radius: 20px; z-index: 1; cursor: pointer; } '+
         '.alt_help:hover { background: #00ffe2; } '+
+        '.alt_help a { text-decoration: none !important; } '+
         '.p-accessibility .p-aiAlt__header, .p-accessibility .p-aiAlt__subTitle { display: none; }'+
         '</style>';
 
@@ -100,10 +101,11 @@ function main(){
                 img_check();
 
                 function img_check(){
-                    let all_img=iframe_doc.querySelectorAll('img');
-                    for(let k=0; k<all_img.length; k++){
-                        all_img[k].addEventListener('mouseover', function(){
-                            disp(all_img[k]); }); }
+                    let body=iframe_doc.querySelector('body.cke_editable');
+                    if(body){
+                        body.addEventListener('mouseover', (event)=>{
+                            if(event.target.tagName==='IMG'){
+                                disp(event.target); }}); }
 
                     card_thumb();
                     abort_key();
@@ -154,26 +156,21 @@ function main(){
 
 
                 function abort_key(){
-                    iframe_doc.addEventListener('keydown', (event)=>{
+                    function h_keydown(event){
                         if(event.key==='Control'){
                             let alt_disp=iframe_doc.querySelector('.alt_disp');
                             if(alt_disp){
                                 alt_disp.style.visibility='hidden';
                                 setTimeout(()=>{
                                     alt_disp.style.visibility='';
-                                }, 2000);
-                            }}});
+                                }, 2000); }}}
 
+                    function add_listener(targetDoc){
+                        targetDoc.removeEventListener('keydown', h_keydown);
+                        targetDoc.addEventListener('keydown', h_keydown); }
 
-                    document.addEventListener('keydown', (event)=>{
-                        if(event.key==='Control'){
-                            let alt_disp=iframe_doc.querySelector('.alt_disp');
-                            if(alt_disp){
-                                alt_disp.style.visibility='hidden';
-                                setTimeout(()=>{
-                                    alt_disp.style.visibility='';
-                                }, 2000);
-                            }}});
+                    add_listener(document);
+                    add_listener(iframe_doc);
 
                 } // abort_key()
 
