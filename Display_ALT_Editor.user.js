@@ -108,7 +108,6 @@ function main(){
                                 disp(event.target); }}); }
 
                     card_thumb();
-                    abort_key();
 
                 } // img_check()
 
@@ -116,8 +115,11 @@ function main(){
 
                 function disp(pelement){
                     let spos_y=iframe_doc.documentElement.scrollTop;
-                    let pos_x=pelement.getBoundingClientRect().left+4;
+                    let pos_x=pelement.getBoundingClientRect().left+2;
                     let pos_y=pelement.getBoundingClientRect().top+spos_y+2;
+                    if(pelement.height<100){ // 小型画像のフキダシ位置
+                        pos_x=pos_x-3;
+                        pos_y=pos_y-28; }
 
                     let alt_text=pelement.getAttribute('alt');
                     let alt_disp=iframe_doc.querySelector('.alt_disp');
@@ -152,27 +154,6 @@ function main(){
                             card_image[k].setAttribute('alt', ''); }}
 
                 } //card_thumb()
-
-
-
-                function abort_key(){
-                    function h_keydown(event){
-                        if(event.key==='Control'){
-                            let alt_disp=iframe_doc.querySelector('.alt_disp');
-                            if(alt_disp){
-                                alt_disp.style.visibility='hidden';
-                                setTimeout(()=>{
-                                    alt_disp.style.visibility='';
-                                }, 2000); }}}
-
-                    function add_listener(targetDoc){
-                        targetDoc.removeEventListener('keydown', h_keydown);
-                        targetDoc.addEventListener('keydown', h_keydown); }
-
-                    add_listener(document);
-                    add_listener(iframe_doc);
-
-                } // abort_key()
 
             }} // if(editor_iframe)
 
