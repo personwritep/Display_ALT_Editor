@@ -93,38 +93,27 @@ function main(){
 
 
 
-                let target1=iframe_doc.querySelector('body.cke_editable'); // 監視 target
-                if(target1){
-                    let monitor1=new MutationObserver(img_check);
-                    monitor1.observe(target1, {childList: true}); }
+                let body=iframe_doc.querySelector('body.cke_editable');
+                if(body){
+                    if(!body.hasAttribute('data-listener')){
+                        body.addEventListener('mouseover', (event)=>{
+                            if(event.target.tagName==='IMG'){
+                                disp(event.target); }});
 
-                img_check();
-
-                function img_check(){
-                    let body=iframe_doc.querySelector('body.cke_editable');
-                    if(body){
-                        if(!body.hasAttribute('data-listener')){
-                            body.addEventListener('mouseover', (event)=>{
-                                if(event.target.tagName==='IMG'){
-                                    disp(event.target); }});
-
-                            body.setAttribute('data-listener', 'true'); }}
-
-                    card_thumb();
-
-                } // img_check()
+                        body.setAttribute('data-listener', 'true'); }}
 
 
+                function disp(image){
+                    card_thumb(image);
 
-                function disp(pelement){
                     let spos_y=iframe_doc.documentElement.scrollTop;
-                    let pos_x=pelement.getBoundingClientRect().left+2;
-                    let pos_y=pelement.getBoundingClientRect().top+spos_y+2;
-                    if(pelement.height<100){ // 小型画像のフキダシ位置
+                    let pos_x=image.getBoundingClientRect().left+2;
+                    let pos_y=image.getBoundingClientRect().top+spos_y+2;
+                    if(image.height<90){ // 小型画像のフキダシ位置
                         pos_x=pos_x-3;
                         pos_y=pos_y-28; }
 
-                    let alt_text=pelement.getAttribute('alt');
+                    let alt_text=image.getAttribute('alt');
                     let alt_disp=iframe_doc.querySelector('.alt_disp');
                     let alt_disp_span=iframe_doc.querySelector('.alt_disp span');
                     if(alt_text && alt_disp && alt_disp_span){
@@ -133,7 +122,7 @@ function main(){
                         alt_disp.style.top=pos_y+'px';
                         alt_disp.style.display='block';
 
-                        disp_out(pelement, alt_disp); }}
+                        disp_out(image, alt_disp); }}
 
 
                 function disp_out(pelem, alt_disp){
@@ -147,14 +136,12 @@ function main(){
                         alt_disp.style.display='none'; }}
 
 
-
-                function card_thumb(){
-                    let card_image=iframe_doc.querySelectorAll('.ogpCard_image');
-                    for(let k=0; k<card_image.length; k++){
+                function card_thumb(image){
+                    if(image.classList.contains('ogpCard_image')){
                         if(type==0){
-                            card_image[k].setAttribute('alt', '🔗'); }
+                            image.setAttribute('alt', '🔗'); }
                         else{
-                            card_image[k].setAttribute('alt', ''); }}
+                            image.setAttribute('alt', ''); }}
 
                 } //card_thumb()
 
